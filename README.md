@@ -1,0 +1,4 @@
+# Sistem-Informasi-Manajemen-Inventory
+Merupakan proyek magang yang berfokus pada analisis dan perancangan sistem manajemen inventaris untuk PT Tarindo, produsen kran berbahan kuningan dan PVC dengan merek dagang AMICO. Proyek ini mencakup studi alur proses inventarisasi di tiga cabang produksi yang mencakup gudang bahan baku, barang setengah jadi, dan barang jadi.
+
+Ditemukan berbagai permasalahan seperti ketidaksesuaian data stok, keterlambatan pelaporan, dan kurangnya pelacakan stok secara real-time. Sebagai solusinya, dirancang prototipe sistem inventaris terpusat menggunakan pendekatan Rapid Application Development (RAD). Sistem ini ditujukan untuk meningkatkan koordinasi antar cabang, menyelaraskan data fisik dan administratif, serta menyediakan visibilitas operasional yang lebih baik bagi divisi administrasi perusahaan.
