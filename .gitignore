@@ -129,4 +129,7 @@ dmypy.json
 .pyre/
 
 # Editor
-.vscode/
+.vscode/db.sqlite3
+staticfiles/
+__pycache__/
+*.pyc
