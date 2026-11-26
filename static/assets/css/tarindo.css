@@ -2644,3 +2644,72 @@ img, svg {
   gap: 10px;
 }
 
+
+/* Auth Links, Pending Badge & Status Cards */
+.auth-form-wrap--wide {
+  max-width: 480px;
+}
+
+.auth-link {
+  color: var(--teal-600);
+  font-size: 0.8375rem;
+  font-weight: 600;
+}
+
+.auth-link:hover {
+  color: var(--teal-700);
+  text-decoration: underline;
+}
+
+.auth-switch-note {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.auth-status-card {
+  text-align: center;
+  padding: 32px 28px;
+}
+
+.auth-status-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-status-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.auth-status-icon--amber {
+  background: var(--amber-bg);
+  color: var(--amber-text);
+}
+
+.auth-status-icon--emerald {
+  background: var(--emerald-bg);
+  color: var(--emerald-text);
+}
+
+.nav-badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--brass-500);
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

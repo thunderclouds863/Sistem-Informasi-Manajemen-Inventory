@@ -1,0 +1,94 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Pending Approvals{% endblock title %}
+
+{% block breadcrumbs %}
+<a href="{% url 'dashboard' %}">Dashboard</a>
+<span class="crumb-sep">/</span>
+<span class="crumb-current">Pending Approvals</span>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<div class="page-header-bar">
+    <div class="page-header-copy">
+        <div class="page-eyebrow">Administration</div>
+        <h1 class="page-title">
+            <span>Partner Account Approvals</span>
+            <span class="count-pill">{{ pending_items|length }}</span>
+        </h1>
+        <p class="page-subtitle">Review and approve self-registered Supplier and Buyer accounts before granting workspace access.</p>
+    </div>
+    <div class="page-actions">
+        <a href="/admin/users/user/" class="btn-tarindo btn-secondary">
+            <i data-lucide="shield"></i>
+            <span>Open Django Admin CMS</span>
+        </a>
+    </div>
+</div>
+
+<section class="surface-card">
+    {% if pending_items %}
+    <div class="table-scroll">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="cell-serial">#</th>
+                    <th>Role</th>
+                    <th>Company / Store</th>
+                    <th>Username &amp; Email</th>
+                    <th>Address</th>
+                    <th>Requested</th>
+                    <th>Decision</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pending_items %}
+                <tr>
+                    <td class="cell-serial">{{ forloop.counter }}</td>
+                    <td>
+                        <span class="status-badge {% if item.role == 'Supplier' %}status-badge--pending{% else %}status-badge--approved{% endif %}">
+                            <span class="status-dot"></span>
+                            {{ item.role }}
+                        </span>
+                    </td>
+                    <td class="cell-strong">{{ item.company_name }}</td>
+                    <td>
+                        <div class="cell-code">{{ item.user.username }}</div>
+                        <div class="cell-muted" style="margin-top:3px">{{ item.user.email|default:"—" }}</div>
+                    </td>
+                    <td class="cell-muted">{{ item.address }}</td>
+                    <td class="cell-muted mono">{{ item.user.date_joined|date:"Y-m-d" }}</td>
+                    <td>
+                        <div class="row-actions">
+                            <form method="post" action="{% url 'approve-account' item.user.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-tarindo btn-brass btn-sm">
+                                    <i data-lucide="check"></i>
+                                    <span>Approve</span>
+                                </button>
+                            </form>
+                            <form method="post" action="{% url 'reject-account' item.user.pk %}" data-confirm-delete="Reject and remove pending registration for '{{ item.company_name }}' ({{ item.user.username }})?">
+                                {% csrf_token %}
+                                <button type="submit" class="row-action-btn row-action-btn--danger" title="Reject registration" aria-label="Reject {{ item.user.username }}">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
+            <circle cx="40" cy="40" r="24" fill="#ECFDF3" stroke="#A7F3D0" stroke-width="2"/>
+            <path d="M29 40L36.5 47.5L52 32" stroke="#067647" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h3>All caught up</h3>
+        <p>There are no pending Supplier or Buyer account registrations waiting for approval.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock content %}

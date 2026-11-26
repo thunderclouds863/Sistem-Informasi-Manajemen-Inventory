@@ -1,0 +1,151 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Partner Registration — PT TARINDO Inventory Management</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/tarindo-mark.svg' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/css/tarindo.css' %}">
+</head>
+<body>
+    <div class="auth-page">
+        <section class="auth-visual-panel" aria-label="PT TARINDO Brand Showcase">
+            <div class="auth-brand-top">
+                <img src="{% static 'images/tarindo-mark.svg' %}" alt="PT TARINDO Logo">
+                <div>
+                    <div class="auth-brand-title">PT TARINDO</div>
+                    <div class="auth-brand-tagline">Inventory &amp; Purchasing System</div>
+                </div>
+            </div>
+
+            <div class="auth-artwork-stage">
+                <div class="auth-artwork-frame">
+                    <img src="{% static 'images/login-foundry-illustration.jpg' %}" alt="Isometric brass foundry workshop and warehouse inventory illustration">
+                </div>
+            </div>
+
+            <div class="auth-provenance">
+                <div>
+                    <div class="auth-provenance-name">Perusahaan Pengecoran Kuningan "TARINDO"</div>
+                    <div class="auth-provenance-addr">
+                        Produksi Kran Air &amp; Alat Ledeng &middot; Jl. Emas No. 489 Growong Lor, Juwana 59185, Pati, Jawa Tengah &middot; Telp. (0295) 471250
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main class="auth-form-panel">
+            <div class="auth-form-wrap auth-form-wrap--wide">
+                {% if submitted %}
+                <div class="auth-card auth-status-card">
+                    <div class="auth-status-icon auth-status-icon--amber">
+                        <i data-lucide="clock"></i>
+                    </div>
+                    <h1 class="auth-heading" style="font-size:1.35rem;margin-bottom:8px;">Registration Submitted</h1>
+                    <p class="auth-subheading" style="margin-bottom:20px;">
+                        Your partner account request has been received and is <strong>pending administrator approval</strong>. You will be able to sign in once a PT TARINDO administrator activates your account.
+                    </p>
+                    <a href="{% url 'login' %}" class="btn-tarindo btn-primary btn-block">
+                        <i data-lucide="arrow-left"></i>
+                        <span>Back to Sign In</span>
+                    </a>
+                </div>
+                {% else %}
+                <h1 class="auth-heading">Partner registration</h1>
+                <p class="auth-subheading">Register as a Supplier or Buyer. New accounts require administrator approval before signing in.</p>
+
+                <div class="auth-card">
+                    {% if form.non_field_errors %}
+                    <div class="form-error-banner" role="alert">
+                        <i data-lucide="alert-circle"></i>
+                        <div>{% for e in form.non_field_errors %}<div>{{ e }}</div>{% endfor %}</div>
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" data-loading-form>
+                        {% csrf_token %}
+
+                        <div class="form-field">
+                            <label for="reg-role" class="form-label">Account Role</label>
+                            {{ form.role }}
+                            {% if form.role.errors %}<span class="field-error">{{ form.role.errors.0 }}</span>{% endif %}
+                        </div>
+
+                        <div class="form-grid-2 form-section-gap">
+                            <div class="form-field">
+                                <label for="reg-name" class="form-label">Company / Store Name</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}<span class="field-error">{{ form.name.errors.0 }}</span>{% endif %}
+                            </div>
+                            <div class="form-field">
+                                <label for="reg-address" class="form-label">Address</label>
+                                {{ form.address }}
+                                {% if form.address.errors %}<span class="field-error">{{ form.address.errors.0 }}</span>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-grid-2 form-section-gap">
+                            <div class="form-field">
+                                <label for="reg-email" class="form-label">Email Address</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}<span class="field-error">{{ form.email.errors.0 }}</span>{% endif %}
+                            </div>
+                            <div class="form-field">
+                                <label for="reg-username" class="form-label">Username</label>
+                                {{ form.username }}
+                                {% if form.username.errors %}<span class="field-error">{{ form.username.errors.0 }}</span>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-grid-2 form-section-gap">
+                            <div class="form-field">
+                                <label for="reg-password" class="form-label">Password</label>
+                                <div class="input-password-wrap">
+                                    {{ form.password }}
+                                    <button type="button" class="password-toggle-btn" data-toggle-password="reg-password" aria-label="Show password">
+                                        <i data-lucide="eye" class="icon-eye"></i>
+                                        <i data-lucide="eye-off" class="icon-eye-off" style="display:none"></i>
+                                    </button>
+                                </div>
+                                {% if form.password.errors %}<span class="field-error">{{ form.password.errors.0 }}</span>{% endif %}
+                            </div>
+                            <div class="form-field">
+                                <label for="reg-retype-password" class="form-label">Confirm Password</label>
+                                <div class="input-password-wrap">
+                                    {{ form.retype_password }}
+                                    <button type="button" class="password-toggle-btn" data-toggle-password="reg-retype-password" aria-label="Show password">
+                                        <i data-lucide="eye" class="icon-eye"></i>
+                                        <i data-lucide="eye-off" class="icon-eye-off" style="display:none"></i>
+                                    </button>
+                                </div>
+                                {% if form.retype_password.errors %}<span class="field-error">{{ form.retype_password.errors.0 }}</span>{% endif %}
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-tarindo btn-brass btn-lg btn-block">
+                            <span>Submit Registration for Approval</span>
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <p class="auth-switch-note">
+                    Already have an approved account? <a href="{% url 'login' %}" class="auth-link">Sign in</a>
+                </p>
+                {% endif %}
+
+                <p class="auth-footer-note">
+                    &copy; 2024 PT TARINDO &middot; Juwana, Pati, Jawa Tengah
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <script src="{% static 'assets/js/tarindo.js' %}"></script>
+</body>
+</html>
