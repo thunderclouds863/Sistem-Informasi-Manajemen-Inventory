@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 
 from users.models import User
 from .models import (
@@ -36,13 +37,22 @@ def create_supplier(request):
             username = forms.cleaned_data['username']
             password = forms.cleaned_data['password']
             retype_password = forms.cleaned_data['retype_password']
-            if password == retype_password:
-                user = User.objects.create_user(
-                    username=username, password=password,
-                    email=email, is_supplier=True
-                )
-                Supplier.objects.create(user=user, name=name, address=address)
-                return redirect('supplier-list')
+            if password != retype_password:
+                forms.add_error('retype_password', 'Passwords do not match.')
+            elif User.objects.filter(username=username).exists():
+                forms.add_error('username', 'This username is already taken.')
+            elif Supplier.objects.filter(name=name).exists():
+                forms.add_error('name', 'A supplier with this name already exists.')
+            else:
+                try:
+                    user = User.objects.create_user(
+                        username=username, password=password,
+                        email=email, is_supplier=True
+                    )
+                    Supplier.objects.create(user=user, name=name, address=address)
+                    return redirect('supplier-list')
+                except IntegrityError:
+                    forms.add_error(None, 'Could not create supplier. Please check the entered details.')
     context = {
         'form': forms
     }
@@ -68,13 +78,22 @@ def create_buyer(request):
             username = forms.cleaned_data['username']
             password = forms.cleaned_data['password']
             retype_password = forms.cleaned_data['retype_password']
-            if password == retype_password:
-                user = User.objects.create_user(
-                    username=username, password=password,
-                    email=email, is_buyer=True
-                )
-                Buyer.objects.create(user=user, name=name, address=address)
-                return redirect('buyer-list')
+            if password != retype_password:
+                forms.add_error('retype_password', 'Passwords do not match.')
+            elif User.objects.filter(username=username).exists():
+                forms.add_error('username', 'This username is already taken.')
+            elif Buyer.objects.filter(name=name).exists():
+                forms.add_error('name', 'A buyer with this name already exists.')
+            else:
+                try:
+                    user = User.objects.create_user(
+                        username=username, password=password,
+                        email=email, is_buyer=True
+                    )
+                    Buyer.objects.create(user=user, name=name, address=address)
+                    return redirect('buyer-list')
+                except IntegrityError:
+                    forms.add_error(None, 'Could not create buyer. Please check the entered details.')
     context = {
         'form': forms
     }
@@ -187,7 +206,10 @@ class OrderListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['order'] = Order.objects.all().order_by('-id')
+        context['order'] = (
+            Order.objects.select_related('supplier', 'product', 'buyer', 'season', 'drop')
+            .order_by('-id')
+        )
         return context
 
 

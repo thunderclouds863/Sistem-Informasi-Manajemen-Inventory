@@ -1,74 +1,83 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Buyer List{% endblock title %}
+{% block title %}Buyers{% endblock title %}
 
 {% block breadcrumbs %}
-<div class="breadcrumbs">
-    <div class="breadcrumbs-inner">
-        <div class="row m-0">
-            <div class="col-sm-4">
-                <div class="page-header float-left">
-                    <div class="page-title">
-                        <h1>Dashboard</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-8">
-                <div class="page-header float-right">
-                    <div class="page-title">
-                        <ol class="breadcrumb text-right">
-                            <li><a href="#">Dashboard</a></li>
-                            <li><a href="#">Buyer</a></li>
-                            <li class="active">List</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<a href="{% url 'dashboard' %}">Dashboard</a>
+<span class="crumb-sep">/</span>
+<span class="crumb-current">Buyers</span>
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="box-title">Buyer List </h4>
-            </div>
-            <div class="card-body--">
-                <div class="table-stats order-table ov-h">
-                    <table class="table ">
-                        <thead>
-                            <tr>
-                                <th class="serial">#</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Email</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if buyer %}
-                            {% for buyer in buyer %}
-                            <tr>
-                                <td class="serial">{{ forloop.counter }}</td>
-                                <td>{{ buyer.name }}</td>
-                                <td>{{ buyer.address }}</td>
-                                <td>{{ buyer.user.email }}</td>
-                                <td>{{ buyer.created_date }}</td>
-                            </tr>
-                            {% endfor %}
-                            {% else %}
-                                <tr><td>No Buyer Data</td></tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div> <!-- /.table-stats -->
-            </div>
-        </div> <!-- /.card -->
-    </div>  <!-- /.col-lg-8 -->
-
-    
+<div class="page-header-bar">
+    <div class="page-header-copy">
+        <div class="page-eyebrow">Partners</div>
+        <h1 class="page-title">
+            <span>Buyers</span>
+            <span class="count-pill">{{ buyer|length }}</span>
+        </h1>
+        <p class="page-subtitle">Hardware stores, distributors, and sanitary ware retail accounts.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'create-buyer' %}" class="btn-tarindo btn-brass">
+            <i data-lucide="plus"></i>
+            <span>Add Buyer</span>
+        </a>
+    </div>
 </div>
+
+<section class="surface-card" data-filter-table>
+    {% if buyer %}
+    <div class="table-toolbar">
+        <div class="search-box">
+            <i data-lucide="search"></i>
+            <input type="search" class="search-input" data-table-search placeholder="Search buyers by name, address, email...">
+        </div>
+    </div>
+
+    <div class="table-scroll">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="cell-serial">#</th>
+                    <th>Buyer</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Registered</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in buyer %}
+                <tr data-row>
+                    <td class="cell-serial">{{ forloop.counter }}</td>
+                    <td>
+                        <div class="cell-entity">
+                            <span class="entity-avatar entity-avatar--teal">{{ item.name|slice:":2" }}</span>
+                            <span class="cell-strong">{{ item.name }}</span>
+                        </div>
+                    </td>
+                    <td class="cell-muted">{{ item.address }}</td>
+                    <td class="cell-muted">{{ item.user.email|default:"—" }}</td>
+                    <td class="cell-muted mono">{{ item.created_date|date:"Y-m-d" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="table-no-match" data-no-match>No buyers match your search query.</div>
+    {% else %}
+    <div class="empty-state">
+        <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
+            <circle cx="40" cy="30" r="12" fill="#E9F4F7" stroke="#0F5C6E" stroke-width="2"/>
+            <path d="M18 62C18 50.954 27.85 44 40 44C52.15 44 62 50.954 62 62" stroke="#0F5C6E" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <h3>No buyers registered</h3>
+        <p>Add hardware stores or distributors to track customer orders and deliveries.</p>
+        <a href="{% url 'create-buyer' %}" class="btn-tarindo btn-brass btn-sm">
+            <i data-lucide="plus"></i>
+            <span>Add Buyer</span>
+        </a>
+    </div>
+    {% endif %}
+</section>
 {% endblock content %}
