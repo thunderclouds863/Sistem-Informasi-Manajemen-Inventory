@@ -22,6 +22,12 @@
                 <i data-lucide="user-cog"></i>
                 <span>Account &amp; Password</span>
             </a>
+            {% if request.user.is_staff or request.user.is_superuser %}
+            <a href="/admin/" class="dropdown-link" role="menuitem" target="_blank" rel="noopener noreferrer">
+                <i data-lucide="sliders-horizontal"></i>
+                <span>Django Admin CMS</span>
+            </a>
+            {% endif %}
             <a href="{% url 'order-list' %}" class="dropdown-link" role="menuitem">
                 <i data-lucide="clipboard-list"></i>
                 <span>Orders</span>
