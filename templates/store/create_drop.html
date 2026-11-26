@@ -1,72 +1,63 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Add Warehouse Drop{% endblock title %}
+{% block title %}Create Drop{% endblock title %}
 
 {% block breadcrumbs %}
-<a href="{% url 'dashboard' %}">Dashboard</a>
-<span class="crumb-sep">/</span>
-<a href="{% url 'drop-list' %}">Warehouse Drops</a>
-<span class="crumb-sep">/</span>
-<span class="crumb-current">Add</span>
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Drop</a></li>
+                            <li class="active">Create</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="page-header-bar">
-    <div class="page-header-copy">
-        <div class="page-eyebrow">Catalog &amp; Storage</div>
-        <h1 class="page-title">Add Warehouse Drop</h1>
-        <p class="page-subtitle">Add a staging zone or storage warehouse for incoming and finished inventory.</p>
-    </div>
-    <div class="page-actions">
-        <a href="{% url 'drop-list' %}" class="btn-tarindo btn-secondary">
-            <i data-lucide="arrow-left"></i>
-            <span>Back to Drops</span>
-        </a>
-    </div>
-</div>
-
-<div class="form-workspace">
-    <section class="surface-card">
-        <div class="surface-header">
-            <div>
-                <h2 class="surface-title">Location Name</h2>
-                <p class="surface-subtitle">Specify a clear, unique warehouse or drop zone label</p>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <strong class="card-title">Create Drop</strong>
             </div>
-        </div>
-        <div class="surface-body">
-            {% if form.non_field_errors %}
-            <div class="form-error-banner" role="alert">
-                <i data-lucide="alert-circle"></i>
-                <div>{% for e in form.non_field_errors %}<div>{{ e }}</div>{% endfor %}</div>
-            </div>
-            {% endif %}
-
-            <form method="post" data-loading-form>
-                {% csrf_token %}
-
-                <div class="form-field">
-                    <label for="name" class="form-label">Warehouse / Drop Name</label>
-                    {{ form.name }}
-                    {% if form.name.errors %}<span class="field-error">{{ form.name.errors.0 }}</span>{% endif %}
+            <div class="card-body">
+                <!-- Credit Card -->
+                <div id="pay-invoice">
+                    <div class="card-body">
+                        <form action="#" method="post" novalidate="novalidate">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="name" class="control-label mb-1">Name</label>
+                                {{ form.name }}
+                            </div>
+                            <div>
+                                <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                    <span id="payment-button-amount">Create Drop</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
-                <div class="form-actions">
-                    <a href="{% url 'drop-list' %}" class="btn-tarindo btn-secondary">Cancel</a>
-                    <button type="submit" class="btn-tarindo btn-brass">
-                        <i data-lucide="check"></i>
-                        <span>Save Drop</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </section>
+            </div>
+        </div> <!-- .card -->
 
-    <aside class="guide-card">
-        <h3 class="guide-card-title">
-            <i data-lucide="warehouse"></i>
-            <span>Warehouse Zones</span>
-        </h3>
-        <p>Typical foundry drop locations include raw material storage, work-in-progress staging, and finished goods dispatch.</p>
-    </aside>
+    </div><!--/.col-->
 </div>
 {% endblock content %}

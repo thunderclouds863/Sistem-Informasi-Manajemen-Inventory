@@ -1,83 +1,74 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Suppliers{% endblock title %}
+{% block title %}Supplier List{% endblock title %}
 
 {% block breadcrumbs %}
-<a href="{% url 'dashboard' %}">Dashboard</a>
-<span class="crumb-sep">/</span>
-<span class="crumb-current">Suppliers</span>
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Supplier</a></li>
+                            <li class="active">List</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="page-header-bar">
-    <div class="page-header-copy">
-        <div class="page-eyebrow">Partners</div>
-        <h1 class="page-title">
-            <span>Suppliers</span>
-            <span class="count-pill">{{ supplier|length }}</span>
-        </h1>
-        <p class="page-subtitle">Raw material vendors and brass casting partners supplying PT TARINDO.</p>
-    </div>
-    <div class="page-actions">
-        <a href="{% url 'create-supplier' %}" class="btn-tarindo btn-brass">
-            <i data-lucide="plus"></i>
-            <span>Add Supplier</span>
-        </a>
-    </div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="box-title">Supplier List </h4>
+            </div>
+            <div class="card-body--">
+                <div class="table-stats order-table ov-h">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th class="serial">#</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Email</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if supplier %}
+                            {% for supplier in supplier %}
+                            <tr>
+                                <td class="serial">{{ forloop.counter }}</td>
+                                <td>{{ supplier.name }}</td>
+                                <td>{{ supplier.address }}</td>
+                                <td>{{ supplier.user.email }}</td>
+                                <td>{{ supplier.created_date }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                                <tr><td>No Supplier Data</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div> <!-- /.table-stats -->
+            </div>
+        </div> <!-- /.card -->
+    </div>  <!-- /.col-lg-8 -->
+
+    
 </div>
-
-<section class="surface-card" data-filter-table>
-    {% if supplier %}
-    <div class="table-toolbar">
-        <div class="search-box">
-            <i data-lucide="search"></i>
-            <input type="search" class="search-input" data-table-search placeholder="Search suppliers by name, address, email...">
-        </div>
-    </div>
-
-    <div class="table-scroll">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th class="cell-serial">#</th>
-                    <th>Supplier</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Registered</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in supplier %}
-                <tr data-row>
-                    <td class="cell-serial">{{ forloop.counter }}</td>
-                    <td>
-                        <div class="cell-entity">
-                            <span class="entity-avatar">{{ item.name|slice:":2" }}</span>
-                            <span class="cell-strong">{{ item.name }}</span>
-                        </div>
-                    </td>
-                    <td class="cell-muted">{{ item.address }}</td>
-                    <td class="cell-muted">{{ item.user.email|default:"—" }}</td>
-                    <td class="cell-muted mono">{{ item.created_date|date:"Y-m-d" }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="table-no-match" data-no-match>No suppliers match your search query.</div>
-    {% else %}
-    <div class="empty-state">
-        <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
-            <rect x="14" y="28" width="52" height="36" rx="8" fill="#FBF4E6" stroke="#EAD5AF" stroke-width="2"/>
-            <path d="M24 28V20H34V28M46 28V16H56V28" stroke="#B87D28" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-        <h3>No suppliers registered</h3>
-        <p>Add raw material suppliers to assign them to purchasing orders.</p>
-        <a href="{% url 'create-supplier' %}" class="btn-tarindo btn-brass btn-sm">
-            <i data-lucide="plus"></i>
-            <span>Add Supplier</span>
-        </a>
-    </div>
-    {% endif %}
-</section>
 {% endblock content %}
