@@ -1,21 +1,21 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Add Supplier{% endblock title %}
+{% block title %}{% if is_edit %}Edit Supplier{% else %}Add Supplier{% endif %}{% endblock title %}
 
 {% block breadcrumbs %}
 <a href="{% url 'dashboard' %}">Dashboard</a>
 <span class="crumb-sep">/</span>
 <a href="{% url 'supplier-list' %}">Suppliers</a>
 <span class="crumb-sep">/</span>
-<span class="crumb-current">Add</span>
+<span class="crumb-current">{% if is_edit %}Edit{% else %}Add{% endif %}</span>
 {% endblock breadcrumbs %}
 
 {% block content %}
 <div class="page-header-bar">
     <div class="page-header-copy">
         <div class="page-eyebrow">Partners</div>
-        <h1 class="page-title">Add Supplier</h1>
-        <p class="page-subtitle">Register a raw material vendor and provision their system account.</p>
+        <h1 class="page-title">{% if is_edit %}Edit Supplier{% else %}Add Supplier{% endif %}</h1>
+        <p class="page-subtitle">{% if is_edit %}Update supplier company details and contact email.{% else %}Register a raw material vendor and provision their system account.{% endif %}</p>
     </div>
     <div class="page-actions">
         <a href="{% url 'supplier-list' %}" class="btn-tarindo btn-secondary">
@@ -56,6 +56,7 @@
                     {% if form.address.errors %}<span class="field-error">{{ form.address.errors.0 }}</span>{% endif %}
                 </div>
 
+                {% if not is_edit %}
                 <div class="form-grid-2 form-section-gap">
                     <div class="form-field">
                         <label for="email" class="form-label">Email Address</label>
@@ -93,12 +94,19 @@
                         {% if form.retype_password.errors %}<span class="field-error">{{ form.retype_password.errors.0 }}</span>{% endif %}
                     </div>
                 </div>
+                {% else %}
+                <div class="form-field">
+                    <label for="email" class="form-label">Email Address</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}<span class="field-error">{{ form.email.errors.0 }}</span>{% endif %}
+                </div>
+                {% endif %}
 
                 <div class="form-actions">
                     <a href="{% url 'supplier-list' %}" class="btn-tarindo btn-secondary">Cancel</a>
                     <button type="submit" class="btn-tarindo btn-brass">
                         <i data-lucide="check"></i>
-                        <span>Create Supplier</span>
+                        <span>{% if is_edit %}Save Changes{% else %}Create Supplier{% endif %}</span>
                     </button>
                 </div>
             </form>

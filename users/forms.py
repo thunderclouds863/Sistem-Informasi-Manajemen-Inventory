@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 class LoginForm(forms.Form):
@@ -15,3 +16,26 @@ class LoginForm(forms.Form):
         'placeholder': 'Enter your password',
         'autocomplete': 'current-password',
     }))
+
+
+class TarindoPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['old_password'].widget.attrs.update({
+            'class': 'tarindo-input',
+            'id': 'old_password',
+            'placeholder': 'Enter current password',
+            'autocomplete': 'current-password',
+        })
+        self.fields['new_password1'].widget.attrs.update({
+            'class': 'tarindo-input',
+            'id': 'new_password1',
+            'placeholder': 'Enter new password',
+            'autocomplete': 'new-password',
+        })
+        self.fields['new_password2'].widget.attrs.update({
+            'class': 'tarindo-input',
+            'id': 'new_password2',
+            'placeholder': 'Confirm new password',
+            'autocomplete': 'new-password',
+        })

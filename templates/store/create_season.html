@@ -1,21 +1,21 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Add Season{% endblock title %}
+{% block title %}{% if is_edit %}Edit Season{% else %}Add Season{% endif %}{% endblock title %}
 
 {% block breadcrumbs %}
 <a href="{% url 'dashboard' %}">Dashboard</a>
 <span class="crumb-sep">/</span>
 <a href="{% url 'season-list' %}">Seasons</a>
 <span class="crumb-sep">/</span>
-<span class="crumb-current">Add</span>
+<span class="crumb-current">{% if is_edit %}Edit{% else %}Add{% endif %}</span>
 {% endblock breadcrumbs %}
 
 {% block content %}
 <div class="page-header-bar">
     <div class="page-header-copy">
         <div class="page-eyebrow">Catalog &amp; Storage</div>
-        <h1 class="page-title">Add Season</h1>
-        <p class="page-subtitle">Define a production quarter or purchasing cycle for grouping orders.</p>
+        <h1 class="page-title">{% if is_edit %}Edit Season{% else %}Add Season{% endif %}</h1>
+        <p class="page-subtitle">{% if is_edit %}Update season label or planning description.{% else %}Define a production quarter or purchasing cycle for grouping orders.{% endif %}</p>
     </div>
     <div class="page-actions">
         <a href="{% url 'season-list' %}" class="btn-tarindo btn-secondary">

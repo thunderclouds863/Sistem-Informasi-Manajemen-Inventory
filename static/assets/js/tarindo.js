@@ -175,3 +175,64 @@
     initSubmitLoading();
   });
 })();
+
+(function () {
+  'use strict';
+
+  function initFlashDismiss() {
+    document.querySelectorAll('[data-dismiss-flash]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var alert = btn.closest('.flash-alert');
+        if (alert) alert.remove();
+      });
+    });
+  }
+
+  function initConfirmDeleteModal() {
+    var overlay = document.getElementById('confirmDeleteModal');
+    var msgEl = document.getElementById('confirmDeleteMessage');
+    var cancelBtn = document.getElementById('confirmDeleteCancel');
+    var confirmBtn = document.getElementById('confirmDeleteSubmit');
+    if (!overlay || !confirmBtn) return;
+
+    var pendingForm = null;
+
+    function close() {
+      overlay.classList.remove('is-open');
+      pendingForm = null;
+    }
+
+    document.querySelectorAll('form[data-confirm-delete]').forEach(function (form) {
+      form.addEventListener('submit', function (e) {
+        if (form.getAttribute('data-confirmed') === 'true') return;
+        e.preventDefault();
+        pendingForm = form;
+        if (msgEl) {
+          msgEl.textContent = form.getAttribute('data-confirm-delete') || 'Are you sure you want to delete this record?';
+        }
+        overlay.classList.add('is-open');
+        confirmBtn.focus();
+      });
+    });
+
+    confirmBtn.addEventListener('click', function () {
+      if (pendingForm) {
+        pendingForm.setAttribute('data-confirmed', 'true');
+        pendingForm.submit();
+      }
+    });
+
+    if (cancelBtn) cancelBtn.addEventListener('click', close);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) close();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initFlashDismiss();
+    initConfirmDeleteModal();
+  });
+})();

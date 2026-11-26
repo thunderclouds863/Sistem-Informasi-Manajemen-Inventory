@@ -15,16 +15,16 @@
             <div class="dropdown-user-header">
                 <strong>{{ request.user.username|default:"User" }}</strong>
                 <span>
-                    {% if request.user.is_admin or request.user.is_superuser %}Administrator Account{% elif request.user.is_supplier %}Supplier Partner{% elif request.user.is_buyer %}Buyer Partner{% else %}Inventory Staff{% endif %}
+                    {% if request.user.is_admin or request.user.is_superuser or request.user.is_staff %}Administrator Account{% elif request.user.is_supplier %}Supplier Partner{% elif request.user.is_buyer %}Buyer Partner{% else %}Inventory Staff{% endif %}
                 </span>
             </div>
-            <a href="{% url 'dashboard' %}" class="dropdown-link" role="menuitem">
-                <i data-lucide="layout-dashboard"></i>
-                <span>Dashboard</span>
+            <a href="{% url 'profile' %}" class="dropdown-link" role="menuitem">
+                <i data-lucide="user-cog"></i>
+                <span>Account &amp; Password</span>
             </a>
             <a href="{% url 'order-list' %}" class="dropdown-link" role="menuitem">
                 <i data-lucide="clipboard-list"></i>
-                <span>Manage Orders</span>
+                <span>Orders</span>
             </a>
             <a href="{% url 'logout' %}" class="dropdown-link dropdown-link--danger" role="menuitem">
                 <i data-lucide="log-out"></i>
