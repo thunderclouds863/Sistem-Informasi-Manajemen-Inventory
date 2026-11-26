@@ -3,85 +3,114 @@
 {% block title %}Create Order{% endblock title %}
 
 {% block breadcrumbs %}
-<div class="breadcrumbs">
-    <div class="breadcrumbs-inner">
-        <div class="row m-0">
-            <div class="col-sm-4">
-                <div class="page-header float-left">
-                    <div class="page-title">
-                        <h1>Dashboard</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-8">
-                <div class="page-header float-right">
-                    <div class="page-title">
-                        <ol class="breadcrumb text-right">
-                            <li><a href="#">Dashboard</a></li>
-                            <li><a href="#">Order</a></li>
-                            <li class="active">Create</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<a href="{% url 'dashboard' %}">Dashboard</a>
+<span class="crumb-sep">/</span>
+<a href="{% url 'order-list' %}">Orders</a>
+<span class="crumb-sep">/</span>
+<span class="crumb-current">Create</span>
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                <strong class="card-title">Create Order</strong>
+<div class="page-header-bar">
+    <div class="page-header-copy">
+        <div class="page-eyebrow">Operations</div>
+        <h1 class="page-title">Create Order</h1>
+        <p class="page-subtitle">Record a new production or purchasing order and assign its warehouse drop.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'order-list' %}" class="btn-tarindo btn-secondary">
+            <i data-lucide="arrow-left"></i>
+            <span>Back to Orders</span>
+        </a>
+    </div>
+</div>
+
+<div class="form-workspace">
+    <section class="surface-card">
+        <div class="surface-header">
+            <div>
+                <h2 class="surface-title">Order Specifications</h2>
+                <p class="surface-subtitle">New orders start in Pending status until approved</p>
             </div>
-            <div class="card-body">
-                <!-- Credit Card -->
-                <div id="pay-invoice">
-                    <div class="card-body">
-                        <form action="#" method="post" novalidate="novalidate">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="supplier" class="control-label mb-1">Supplier</label>
-                                {{ form.supplier }}
-                            </div>
-                            <div class="form-group">
-                                <label for="product" class="control-label mb-1">Product</label>
-                                {{ form.product }}
-                            </div>
-                            <div class="form-group">
-                                <label for="design" class="control-label mb-1">Design</label>
-                                {{ form.design }}
-                            </div>
-                            <div class="form-group">
-                                <label for="color" class="control-label mb-1">Color</label>
-                                {{ form.color }}
-                            </div>
-                            <div class="form-group">
-                                <label for="buyer" class="control-label mb-1">Buyer</label>
-                                {{ form.buyer }}
-                            </div>
-                            <div class="form-group">
-                                <label for="season" class="control-label mb-1">Season</label>
-                                {{ form.season }}
-                            </div>
-                            <div class="form-group">
-                                <label for="drop" class="control-label mb-1">Drop</label>
-                                {{ form.drop }}
-                            </div>
-                            <div>
-                                <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
-                                    <span id="payment-button-amount">Create Order</span>
-                                </button>
-                            </div>
-                        </form>
+        </div>
+        <div class="surface-body">
+            {% if form.non_field_errors %}
+            <div class="form-error-banner" role="alert">
+                <i data-lucide="alert-circle"></i>
+                <div>{% for e in form.non_field_errors %}<div>{{ e }}</div>{% endfor %}</div>
+            </div>
+            {% endif %}
+
+            <form method="post" data-loading-form>
+                {% csrf_token %}
+
+                <div class="form-grid-2 form-section-gap">
+                    <div class="form-field">
+                        <label for="supplier" class="form-label">Supplier</label>
+                        {{ form.supplier }}
+                        {% if form.supplier.errors %}<span class="field-error">{{ form.supplier.errors.0 }}</span>{% endif %}
+                    </div>
+                    <div class="form-field">
+                        <label for="product" class="form-label">Product</label>
+                        {{ form.product }}
+                        {% if form.product.errors %}<span class="field-error">{{ form.product.errors.0 }}</span>{% endif %}
                     </div>
                 </div>
 
-            </div>
-        </div> <!-- .card -->
+                <div class="form-grid-2 form-section-gap">
+                    <div class="form-field">
+                        <label for="design" class="form-label">Design Code</label>
+                        {{ form.design }}
+                        {% if form.design.errors %}<span class="field-error">{{ form.design.errors.0 }}</span>{% endif %}
+                    </div>
+                    <div class="form-field">
+                        <label for="color" class="form-label">Color / Finish</label>
+                        {{ form.color }}
+                        {% if form.color.errors %}<span class="field-error">{{ form.color.errors.0 }}</span>{% endif %}
+                    </div>
+                </div>
 
-    </div><!--/.col-->
+                <div class="form-field">
+                    <label for="buyer" class="form-label">Buyer</label>
+                    {{ form.buyer }}
+                    {% if form.buyer.errors %}<span class="field-error">{{ form.buyer.errors.0 }}</span>{% endif %}
+                </div>
+
+                <div class="form-grid-2 form-section-gap">
+                    <div class="form-field">
+                        <label for="season" class="form-label">Season</label>
+                        {{ form.season }}
+                        {% if form.season.errors %}<span class="field-error">{{ form.season.errors.0 }}</span>{% endif %}
+                    </div>
+                    <div class="form-field">
+                        <label for="drop" class="form-label">Warehouse Drop</label>
+                        {{ form.drop }}
+                        {% if form.drop.errors %}<span class="field-error">{{ form.drop.errors.0 }}</span>{% endif %}
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="{% url 'order-list' %}" class="btn-tarindo btn-secondary">Cancel</a>
+                    <button type="submit" class="btn-tarindo btn-brass">
+                        <i data-lucide="check"></i>
+                        <span>Create Order</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <aside class="guide-card">
+        <h3 class="guide-card-title">
+            <i data-lucide="info"></i>
+            <span>Order Workflow</span>
+        </h3>
+        <p>Orders connect raw material suppliers, catalog items, and destination warehouses in a single traceable record.</p>
+        <ul class="guide-list">
+            <li><i data-lucide="check-circle-2"></i><span>Use standardized design codes (e.g. <strong>D-108</strong>) for foundry mold matching.</span></li>
+            <li><i data-lucide="check-circle-2"></i><span>Specify finish color such as Gold, Silver, Putih, or Abu.</span></li>
+            <li><i data-lucide="check-circle-2"></i><span>Assign the target drop warehouse for staging and dispatch.</span></li>
+        </ul>
+    </aside>
 </div>
 {% endblock content %}
