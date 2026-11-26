@@ -1,106 +1,98 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Orders{% endblock title %}
+{% block title %}Order List{% endblock title %}
 
 {% block breadcrumbs %}
-<a href="{% url 'dashboard' %}">Dashboard</a>
-<span class="crumb-sep">/</span>
-<span class="crumb-current">Orders</span>
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Order</a></li>
+                            <li class="active">List</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="page-header-bar">
-    <div class="page-header-copy">
-        <div class="page-eyebrow">Operations</div>
-        <h1 class="page-title">
-            <span>Orders</span>
-            <span class="count-pill">{{ order|length }}</span>
-        </h1>
-        <p class="page-subtitle">Track supplier production orders, design specifications, and warehouse routing.</p>
-    </div>
-    <div class="page-actions">
-        <a href="{% url 'create-order' %}" class="btn-tarindo btn-brass">
-            <i data-lucide="plus"></i>
-            <span>Create Order</span>
-        </a>
-    </div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="box-title">Order List </h4>
+            </div>
+            <div class="card-body--">
+                <div class="table-stats order-table ov-h">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th class="serial">#</th>
+                                <th>Supplier</th>
+                                <th>Product</th>
+                                <th>Design</th>
+                                <th>Color</th>
+                                <th>Buyer</th>
+                                <th>Season</th>
+                                <th>Drop</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if order %}
+                            {% for order in order %}
+                            <tr>
+                                <td class="serial">{{ forloop.counter }}</td>
+                                <td>{{ order.supplier }}</td>
+                                <td>{{ order.product }}</td>
+                                <td>{{ order.design }}</td>
+                                <td>{{ order.color }}</td>
+                                <td>{{ order.buyer }}</td>
+                                <td>{{ order.season }}</td>
+                                <td>{{ order.drop }}</td>
+                                <td>{{ order.created_date }}</td>
+                                <td>
+                                    {% if order.status == 'pending' %}
+                                        <a class="btn btn-warning" href="">{{ order.status }}</a>
+                                    {% elif order.status == 'decline' %}
+                                        <a class="btn btn-danger" href="">{{ order.status }}</a>
+                                    {% elif order.status == 'complete' %}
+                                        <a class="btn btn-success" href="">{{ order.status }}</a>
+                                    {% elif order.status == 'approved' %}
+                                        <a class="btn btn-primary" href="">{{ order.status }}</a>
+                                    {% elif order.status == 'bulk' %}
+                                        <a class="btn btn-secondary" href="">{{ order.status }}</a>
+                                    {% else %}
+                                        <a class="btn btn-info" href="">{{ order.status }}</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                                <tr><td>No Order Data</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div> <!-- /.table-stats -->
+            </div>
+        </div> <!-- /.card -->
+    </div>  <!-- /.col-lg-8 -->
+
+    
 </div>
-
-<section class="surface-card" data-filter-table>
-    {% if order %}
-    <div class="table-toolbar">
-        <div class="search-box">
-            <i data-lucide="search"></i>
-            <input type="search" class="search-input" data-table-search placeholder="Search supplier, product, design, buyer...">
-        </div>
-        <div class="filter-pills" role="group" aria-label="Filter orders by status">
-            <button type="button" class="filter-pill is-active" data-status-filter="all">All</button>
-            <button type="button" class="filter-pill" data-status-filter="pending">Pending</button>
-            <button type="button" class="filter-pill" data-status-filter="approved">Approved</button>
-            <button type="button" class="filter-pill" data-status-filter="processing">Processing</button>
-            <button type="button" class="filter-pill" data-status-filter="complete">Complete</button>
-            <button type="button" class="filter-pill" data-status-filter="decline">Decline</button>
-        </div>
-    </div>
-
-    <div class="table-scroll">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th class="cell-serial">#</th>
-                    <th>Design</th>
-                    <th>Product</th>
-                    <th>Color</th>
-                    <th>Supplier</th>
-                    <th>Buyer</th>
-                    <th>Season</th>
-                    <th>Drop</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in order %}
-                <tr data-row data-status="{{ item.status }}">
-                    <td class="cell-serial">{{ forloop.counter }}</td>
-                    <td><span class="cell-code">{{ item.design }}</span></td>
-                    <td class="cell-strong">{{ item.product }}</td>
-                    <td>
-                        <span class="color-tag">
-                            <span class="color-swatch" data-color-swatch="{{ item.color }}"></span>
-                            <span>{{ item.color }}</span>
-                        </span>
-                    </td>
-                    <td class="cell-muted">{{ item.supplier }}</td>
-                    <td class="cell-muted">{{ item.buyer|default:"—" }}</td>
-                    <td class="cell-muted">{{ item.season|default:"—" }}</td>
-                    <td class="cell-muted">{{ item.drop|default:"—" }}</td>
-                    <td class="cell-muted mono">{{ item.created_date|date:"Y-m-d" }}</td>
-                    <td>
-                        <span class="status-badge status-badge--{{ item.status }}">
-                            <span class="status-dot"></span>
-                            {{ item.get_status_display }}
-                        </span>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="table-no-match" data-no-match>No orders match your search or status filter.</div>
-    {% else %}
-    <div class="empty-state">
-        <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
-            <rect x="14" y="16" width="52" height="48" rx="10" fill="#FBF4E6" stroke="#EAD5AF" stroke-width="2"/>
-            <path d="M26 32H54M26 42H46M26 52H40" stroke="#B87D28" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-        <h3>No orders yet</h3>
-        <p>Start by creating an order linking a supplier, product, buyer, and warehouse drop.</p>
-        <a href="{% url 'create-order' %}" class="btn-tarindo btn-brass btn-sm">
-            <i data-lucide="plus"></i>
-            <span>Create Order</span>
-        </a>
-    </div>
-    {% endif %}
-</section>
 {% endblock content %}
