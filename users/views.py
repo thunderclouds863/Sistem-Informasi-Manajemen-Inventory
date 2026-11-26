@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm
+from .forms import LoginForm, TarindoPasswordChangeForm
 
 
 def login_page(request):
@@ -27,3 +29,16 @@ def login_page(request):
 def logout_page(request):
     logout(request)
     return redirect('login')
+
+
+@login_required(login_url='login')
+def profile_page(request):
+    password_form = TarindoPasswordChangeForm(request.user)
+    if request.method == 'POST':
+        password_form = TarindoPasswordChangeForm(request.user, request.POST)
+        if password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password has been updated successfully.')
+            return redirect('profile')
+    return render(request, 'users/profile.html', {'password_form': password_form})

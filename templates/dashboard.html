@@ -13,6 +13,8 @@
         <h1 class="page-title">Inventory Overview</h1>
         <p class="page-subtitle">Real-time purchasing orders, catalog stock, and warehouse dispatch across PT TARINDO.</p>
     </div>
+    {% if is_admin_user %}
+    {% if is_admin_user %}
     <div class="page-actions">
         <a href="{% url 'create-product' %}" class="btn-tarindo btn-secondary">
             <i data-lucide="package-plus"></i>
@@ -23,6 +25,8 @@
             <span>Create Order</span>
         </a>
     </div>
+    {% endif %}
+    {% endif %}
 </div>
 
 <!-- KPI Strip -->

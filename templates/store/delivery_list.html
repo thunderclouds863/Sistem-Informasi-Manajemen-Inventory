@@ -18,12 +18,14 @@
         </h1>
         <p class="page-subtitle">Courier dispatches and outbound shipments for completed orders.</p>
     </div>
+    {% if is_admin_user %}
     <div class="page-actions">
         <a href="{% url 'create-delivery' %}" class="btn-tarindo btn-brass">
             <i data-lucide="truck"></i>
             <span>Log Delivery</span>
         </a>
     </div>
+    {% endif %}
 </div>
 
 <section class="surface-card" data-filter-table>
@@ -45,6 +47,7 @@
                     <th>Buyer</th>
                     <th>Courier</th>
                     <th>Dispatched</th>
+                    {% if is_admin_user %}<th>Actions</th>{% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -61,6 +64,21 @@
                         </span>
                     </td>
                     <td class="cell-muted mono">{{ item.created_date|date:"Y-m-d" }}</td>
+                    {% if is_admin_user %}
+                    <td>
+                        <div class="row-actions">
+                            <a href="{% url 'edit-delivery' item.pk %}" class="row-action-btn" title="Edit delivery" aria-label="Edit delivery">
+                                <i data-lucide="pencil"></i>
+                            </a>
+                            <form method="post" action="{% url 'delete-delivery' item.pk %}" data-confirm-delete="Delete delivery record ({{ item.courier_name }}) for {{ item.order }}?">
+                                {% csrf_token %}
+                                <button type="submit" class="row-action-btn row-action-btn--danger" title="Delete delivery" aria-label="Delete delivery">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -77,10 +95,12 @@
         </svg>
         <h3>No deliveries logged yet</h3>
         <p>Assign a courier to a completed order to record outbound shipment.</p>
+        {% if is_admin_user %}
         <a href="{% url 'create-delivery' %}" class="btn-tarindo btn-brass btn-sm">
             <i data-lucide="plus"></i>
             <span>Log Delivery</span>
         </a>
+        {% endif %}
     </div>
     {% endif %}
 </section>

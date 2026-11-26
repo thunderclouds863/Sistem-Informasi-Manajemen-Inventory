@@ -1,21 +1,21 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Add Product{% endblock title %}
+{% block title %}{% if is_edit %}Edit Product{% else %}Add Product{% endif %}{% endblock title %}
 
 {% block breadcrumbs %}
 <a href="{% url 'dashboard' %}">Dashboard</a>
 <span class="crumb-sep">/</span>
 <a href="{% url 'product-list' %}">Products</a>
 <span class="crumb-sep">/</span>
-<span class="crumb-current">Add</span>
+<span class="crumb-current">{% if is_edit %}Edit{% else %}Add{% endif %}</span>
 {% endblock breadcrumbs %}
 
 {% block content %}
 <div class="page-header-bar">
     <div class="page-header-copy">
         <div class="page-eyebrow">Catalog &amp; Storage</div>
-        <h1 class="page-title">Add Product</h1>
-        <p class="page-subtitle">Register a new brass faucet, valve, or sanitary ware SKU into inventory.</p>
+        <h1 class="page-title">{% if is_edit %}Edit Product{% else %}Add Product{% endif %}</h1>
+        <p class="page-subtitle">{% if is_edit %}Update product details and adjust current inventory stock quantity.{% else %}Register a new brass faucet, valve, or sanitary ware SKU into inventory.{% endif %}</p>
     </div>
     <div class="page-actions">
         <a href="{% url 'product-list' %}" class="btn-tarindo btn-secondary">

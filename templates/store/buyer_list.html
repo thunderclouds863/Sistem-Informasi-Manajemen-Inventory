@@ -18,12 +18,14 @@
         </h1>
         <p class="page-subtitle">Hardware stores, distributors, and sanitary ware retail accounts.</p>
     </div>
+    {% if is_admin_user %}
     <div class="page-actions">
         <a href="{% url 'create-buyer' %}" class="btn-tarindo btn-brass">
             <i data-lucide="plus"></i>
             <span>Add Buyer</span>
         </a>
     </div>
+    {% endif %}
 </div>
 
 <section class="surface-card" data-filter-table>
@@ -44,6 +46,7 @@
                     <th>Address</th>
                     <th>Email</th>
                     <th>Registered</th>
+                    {% if is_admin_user %}<th>Actions</th>{% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -59,6 +62,21 @@
                     <td class="cell-muted">{{ item.address }}</td>
                     <td class="cell-muted">{{ item.user.email|default:"—" }}</td>
                     <td class="cell-muted mono">{{ item.created_date|date:"Y-m-d" }}</td>
+                    {% if is_admin_user %}
+                    <td>
+                        <div class="row-actions">
+                            <a href="{% url 'edit-buyer' item.pk %}" class="row-action-btn" title="Edit {{ item.name }}" aria-label="Edit {{ item.name }}">
+                                <i data-lucide="pencil"></i>
+                            </a>
+                            <form method="post" action="{% url 'delete-buyer' item.pk %}" data-confirm-delete="Delete buyer '{{ item.name }}' and their login account?">
+                                {% csrf_token %}
+                                <button type="submit" class="row-action-btn row-action-btn--danger" title="Delete {{ item.name }}" aria-label="Delete {{ item.name }}">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -73,10 +91,12 @@
         </svg>
         <h3>No buyers registered</h3>
         <p>Add hardware stores or distributors to track customer orders and deliveries.</p>
+        {% if is_admin_user %}
         <a href="{% url 'create-buyer' %}" class="btn-tarindo btn-brass btn-sm">
             <i data-lucide="plus"></i>
             <span>Add Buyer</span>
         </a>
+        {% endif %}
     </div>
     {% endif %}
 </section>
