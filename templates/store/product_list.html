@@ -1,79 +1,103 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Product List{% endblock title %}
+{% block title %}Products{% endblock title %}
 
 {% block breadcrumbs %}
-<div class="breadcrumbs">
-    <div class="breadcrumbs-inner">
-        <div class="row m-0">
-            <div class="col-sm-4">
-                <div class="page-header float-left">
-                    <div class="page-title">
-                        <h1>Dashboard</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-8">
-                <div class="page-header float-right">
-                    <div class="page-title">
-                        <ol class="breadcrumb text-right">
-                            <li><a href="#">Dashboard</a></li>
-                            <li><a href="#">Product</a></li>
-                            <li class="active">List</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<a href="{% url 'dashboard' %}">Dashboard</a>
+<span class="crumb-sep">/</span>
+<span class="crumb-current">Products</span>
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="box-title">Product List </h4>
-        </div>
-            <div class="card-body--">
-                <div class="table-stats order-table ov-h">
-                    <table class="table ">
-                        <thead>
-                            <tr>
-                                <th class="serial">No</th>
-                                <th>Name</th>
-                                <th>Stock</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if product %}
-                            {% for product in product %}
-                            <tr>
-                                <td class="serial">{{ forloop.counter }}</td>
-                                <td>{{ product.name }}</td>
-                                <td>{{ product.sortno }}</td>
-                                <td>{{ product.created_date }}</td>
-                            </tr>
-                            {% endfor %}
-                            {% else %}
-                                <tr><td>No Product Data</td></tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div> <!-- /.table-stats -->
-            </div>
-        </div> <!-- /.card -->
-        <div class="card card-body">
-            <hr>
-            <form method="POST">
-                {% csrf_token %}
-                <input class="btn btn-success btn-block" type="submit" value="Add">
-            </form>
-        </div>
-    </div>  <!-- /.col-lg-8 -->
+<div class="page-header-bar">
+    <div class="page-header-copy">
+        <div class="page-eyebrow">Catalog &amp; Storage</div>
+        <h1 class="page-title">
+            <span>Products</span>
+            <span class="count-pill">{{ product|length }}</span>
+        </h1>
+        <p class="page-subtitle">Manage brass faucets, PVC valves, and sanitary ware inventory stock levels.</p>
+    </div>
+    {% if is_admin_user %}
+    <div class="page-actions">
+        <a href="{% url 'create-product' %}" class="btn-tarindo btn-brass">
+            <i data-lucide="package-plus"></i>
+            <span>Add Product</span>
+        </a>
+    </div>
+    {% endif %}
 </div>
 
-</div>
+<section class="surface-card" data-filter-table>
+    {% if product %}
+    <div class="table-toolbar">
+        <div class="search-box">
+            <i data-lucide="search"></i>
+            <input type="search" class="search-input" data-table-search placeholder="Search products by name...">
+        </div>
+    </div>
+
+    <div class="table-scroll">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="cell-serial">No</th>
+                    <th>Product Name</th>
+                    <th>Stock</th>
+                    <th>Added Date</th>
+                    {% if is_admin_user %}<th>Actions</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in product %}
+                <tr data-row>
+                    <td class="cell-serial">{{ forloop.counter }}</td>
+                    <td>
+                        <div class="cell-entity">
+                            <span class="entity-avatar">{{ item.name|slice:":2" }}</span>
+                            <span class="cell-strong">{{ item.name }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="cell-code">{{ item.sortno }} units</span>
+                    </td>
+                    <td class="cell-muted mono">{{ item.created_date|date:"Y-m-d" }}</td>
+                    {% if is_admin_user %}
+                    <td>
+                        <div class="row-actions">
+                            <a href="{% url 'edit-product' item.pk %}" class="row-action-btn" title="Edit {{ item.name }}" aria-label="Edit {{ item.name }}">
+                                <i data-lucide="pencil"></i>
+                            </a>
+                            <form method="post" action="{% url 'delete-product' item.pk %}" data-confirm-delete="Delete product '{{ item.name }}'? Linked orders referencing this product will also be deleted.">
+                                {% csrf_token %}
+                                <button type="submit" class="row-action-btn row-action-btn--danger" title="Delete {{ item.name }}" aria-label="Delete {{ item.name }}">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="table-no-match" data-no-match>No products match your search query.</div>
+    {% else %}
+    <div class="empty-state">
+        <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
+            <path d="M40 14L64 26V54L40 66L16 54V26L40 14Z" fill="#E9F4F7" stroke="#C2E1E8" stroke-width="2"/>
+            <path d="M40 14V40M40 40L64 26M40 40L16 26" stroke="#0F5C6E" stroke-width="2"/>
+        </svg>
+        <h3>No products in catalog</h3>
+        <p>Add your first brass or sanitary ware product to start tracking stock and orders.</p>
+        {% if is_admin_user %}
+        <a href="{% url 'create-product' %}" class="btn-tarindo btn-brass btn-sm">
+            <i data-lucide="plus"></i>
+            <span>Add Product</span>
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
 {% endblock content %}

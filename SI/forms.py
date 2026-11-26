@@ -4,80 +4,134 @@ from .models import Season, Drop, Product, Order, Delivery
 
 
 class SupplierForm(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
+    name = forms.CharField(max_length=120, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
         'id': 'name',
+        'placeholder': 'e.g. PT Logam Kuningan Jaya',
         'data-val': 'true',
         'data-val-required': 'Please enter name',
     }))
-    address = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
+    address = forms.CharField(max_length=220, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
         'id': 'address',
+        'placeholder': 'e.g. Kawasan Industri Tangerang',
         'data-val': 'true',
         'data-val-required': 'Please enter address',
     }))
-    email = forms.CharField(widget=forms.EmailInput(attrs={
-        'class': 'form-control',
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'class': 'tarindo-input',
         'id': 'email',
+        'placeholder': 'supplier@company.co.id',
         'data-val': 'true',
         'data-val-required': 'Please enter email',
     }))
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
+    username = forms.CharField(max_length=150, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
         'id': 'username',
+        'placeholder': 'e.g. supplier_kuningan',
+        'autocomplete': 'off',
         'data-val': 'true',
         'data-val-required': 'Please enter username',
     }))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control',
+    password = forms.CharField(min_length=6, widget=forms.PasswordInput(attrs={
+        'class': 'tarindo-input',
         'id': 'password',
+        'placeholder': 'Minimum 6 characters',
+        'autocomplete': 'new-password',
         'data-val': 'true',
         'data-val-required': 'Please enter password',
     }))
-    retype_password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control',
+    retype_password = forms.CharField(min_length=6, widget=forms.PasswordInput(attrs={
+        'class': 'tarindo-input',
         'id': 'retype_password',
+        'placeholder': 'Re-enter password',
+        'autocomplete': 'new-password',
         'data-val': 'true',
-        'data-val-required': 'Please enter retype_password',
+        'data-val-required': 'Please confirm password',
+    }))
+
+
+class SupplierEditForm(forms.Form):
+    name = forms.CharField(max_length=120, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
+        'id': 'name',
+        'placeholder': 'e.g. PT Logam Kuningan Jaya',
+    }))
+    address = forms.CharField(max_length=220, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
+        'id': 'address',
+        'placeholder': 'e.g. Kawasan Industri Tangerang',
+    }))
+    email = forms.EmailField(required=False, widget=forms.EmailInput(attrs={
+        'class': 'tarindo-input',
+        'id': 'email',
+        'placeholder': 'supplier@company.co.id',
     }))
 
 
 class BuyerForm(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
+    name = forms.CharField(max_length=120, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
         'id': 'name',
+        'placeholder': 'e.g. Toko Bangunan Sentosa',
         'data-val': 'true',
         'data-val-required': 'Please enter name',
     }))
-    address = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
+    address = forms.CharField(max_length=220, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
         'id': 'address',
+        'placeholder': 'e.g. Jl. Raya Jakarta Barat',
         'data-val': 'true',
         'data-val-required': 'Please enter address',
     }))
-    email = forms.CharField(widget=forms.EmailInput(attrs={
-        'class': 'form-control',
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'class': 'tarindo-input',
         'id': 'email',
+        'placeholder': 'purchasing@buyer.co.id',
         'data-val': 'true',
         'data-val-required': 'Please enter email',
     }))
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
+    username = forms.CharField(max_length=150, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
         'id': 'username',
+        'placeholder': 'e.g. buyer_sentosa',
+        'autocomplete': 'off',
         'data-val': 'true',
         'data-val-required': 'Please enter username',
     }))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control',
+    password = forms.CharField(min_length=6, widget=forms.PasswordInput(attrs={
+        'class': 'tarindo-input',
         'id': 'password',
+        'placeholder': 'Minimum 6 characters',
+        'autocomplete': 'new-password',
         'data-val': 'true',
         'data-val-required': 'Please enter password',
     }))
-    retype_password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control',
+    retype_password = forms.CharField(min_length=6, widget=forms.PasswordInput(attrs={
+        'class': 'tarindo-input',
         'id': 'retype_password',
+        'placeholder': 'Re-enter password',
+        'autocomplete': 'new-password',
         'data-val': 'true',
-        'data-val-required': 'Please enter retype_password',
+        'data-val-required': 'Please confirm password',
+    }))
+
+
+class BuyerEditForm(forms.Form):
+    name = forms.CharField(max_length=120, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
+        'id': 'name',
+        'placeholder': 'e.g. Toko Bangunan Sentosa',
+    }))
+    address = forms.CharField(max_length=220, widget=forms.TextInput(attrs={
+        'class': 'tarindo-input',
+        'id': 'address',
+        'placeholder': 'e.g. Jl. Raya Jakarta Barat',
+    }))
+    email = forms.EmailField(required=False, widget=forms.EmailInput(attrs={
+        'class': 'tarindo-input',
+        'id': 'email',
+        'placeholder': 'purchasing@buyer.co.id',
     }))
 
 
@@ -88,10 +142,14 @@ class SeasonForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'name'
+                'class': 'tarindo-input',
+                'id': 'name',
+                'placeholder': 'e.g. Q3 2026',
             }),
             'description': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'description'
+                'class': 'tarindo-input',
+                'id': 'description',
+                'placeholder': 'e.g. Kuartal 3 — Musim Produksi Pipa & Kran',
             })
         }
 
@@ -102,7 +160,9 @@ class DropForm(forms.ModelForm):
         fields = ['name']
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'name'
+                'class': 'tarindo-input',
+                'id': 'name',
+                'placeholder': 'e.g. Gudang Finishing Utara',
             })
         }
 
@@ -113,10 +173,15 @@ class ProductForm(forms.ModelForm):
         fields = ['name', 'sortno']
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'name'
+                'class': 'tarindo-input',
+                'id': 'name',
+                'placeholder': 'e.g. Kran Kuningan 1/2"',
             }),
             'sortno': forms.NumberInput(attrs={
-                'class': 'form-control', 'id': 'sortno'
+                'class': 'tarindo-input',
+                'id': 'sortno',
+                'placeholder': 'e.g. 250',
+                'min': '0',
             })
         }
 
@@ -130,39 +195,58 @@ class OrderForm(forms.ModelForm):
 
         widgets = {
             'supplier': forms.Select(attrs={
-                'class': 'form-control', 'id': 'supplier'
+                'class': 'tarindo-select', 'id': 'supplier'
             }),
             'product': forms.Select(attrs={
-                'class': 'form-control', 'id': 'product'
+                'class': 'tarindo-select', 'id': 'product'
             }),
             'design': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'design'
+                'class': 'tarindo-input',
+                'id': 'design',
+                'placeholder': 'e.g. D-108',
             }),
             'color': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'color'
+                'class': 'tarindo-input',
+                'id': 'color',
+                'placeholder': 'e.g. Gold, Silver, Putih',
             }),
             'buyer': forms.Select(attrs={
-                'class': 'form-control', 'id': 'buyer'
+                'class': 'tarindo-select', 'id': 'buyer'
             }),
             'season': forms.Select(attrs={
-                'class': 'form-control', 'id': 'season'
+                'class': 'tarindo-select', 'id': 'season'
             }),
             'drop': forms.Select(attrs={
-                'class': 'form-control', 'id': 'drop'
+                'class': 'tarindo-select', 'id': 'drop'
             }),
         }
+
+
+class OrderEditForm(OrderForm):
+    class Meta(OrderForm.Meta):
+        fields = [
+            'supplier', 'product', 'design', 'color',
+            'buyer', 'season', 'drop', 'status'
+        ]
+        widgets = dict(OrderForm.Meta.widgets, **{
+            'status': forms.Select(attrs={
+                'class': 'tarindo-select', 'id': 'status'
+            }),
+        })
 
 
 class DeliveryForm(forms.ModelForm):
     class Meta:
         model = Delivery
-        fields = '__all__'
+        fields = ['order', 'courier_name']
 
         widgets = {
             'order': forms.Select(attrs={
-                'class': 'form-control', 'id': 'order'
+                'class': 'tarindo-select', 'id': 'order'
             }),
             'courier_name': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'courier_name'
+                'class': 'tarindo-input',
+                'id': 'courier_name',
+                'placeholder': 'e.g. JNE Cargo, Lalamove, Indah Logistik',
             }),
         }
