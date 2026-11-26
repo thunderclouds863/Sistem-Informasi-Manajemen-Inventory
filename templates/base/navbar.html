@@ -1,105 +1,35 @@
-{% load static %}
+<div class="topbar-right">
+    <span class="topbar-pill">
+        <span class="topbar-pill-dot"></span>
+        Juwana Foundry
+    </span>
 
-<header id="header" class="header">
-    <div class="top-left">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="./"> PT TARINDO</a>
-            <a class="navbar-brand hidden" href="./"><img src="{% static 'images/logo2.png' %}" alt="Logo"></a>
-            <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
+    <div id="userDropdown" class="user-dropdown">
+        <button id="userDropdownTrigger" type="button" class="user-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+            <span class="user-avatar-sm">{{ request.user.username|default:"TR"|slice:":2" }}</span>
+            <span class="user-trigger-name">{{ request.user.username|default:"Account" }}</span>
+            <i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--text-muted)"></i>
+        </button>
+
+        <div class="user-dropdown-menu" role="menu">
+            <div class="dropdown-user-header">
+                <strong>{{ request.user.username|default:"User" }}</strong>
+                <span>
+                    {% if request.user.is_admin or request.user.is_superuser %}Administrator Account{% elif request.user.is_supplier %}Supplier Partner{% elif request.user.is_buyer %}Buyer Partner{% else %}Inventory Staff{% endif %}
+                </span>
+            </div>
+            <a href="{% url 'dashboard' %}" class="dropdown-link" role="menuitem">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{% url 'order-list' %}" class="dropdown-link" role="menuitem">
+                <i data-lucide="clipboard-list"></i>
+                <span>Manage Orders</span>
+            </a>
+            <a href="{% url 'logout' %}" class="dropdown-link dropdown-link--danger" role="menuitem">
+                <i data-lucide="log-out"></i>
+                <span>Sign Out</span>
+            </a>
         </div>
     </div>
-    <div class="top-right">
-        <div class="header-menu">
-            <div class="header-left">
-                <button class="search-trigger"><i class="fa fa-search"></i></button>
-                <div class="form-inline">
-                    <form class="search-form">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Search ..." aria-label="Search">
-                        <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
-                    </form>
-                </div>
-
-                <div class="dropdown for-notification">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-bell"></i>
-                        <span class="count bg-danger">3</span>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="notification">
-                        <p class="red">You have 3 Notification</p>
-                        <a class="dropdown-item media" href="#">
-                            <i class="fa fa-check"></i>
-                            <p>Server #1 overloaded.</p>
-                        </a>
-                        <a class="dropdown-item media" href="#">
-                            <i class="fa fa-info"></i>
-                            <p>Server #2 overloaded.</p>
-                        </a>
-                        <a class="dropdown-item media" href="#">
-                            <i class="fa fa-warning"></i>
-                            <p>Server #3 overloaded.</p>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="dropdown for-message">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="message" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-envelope"></i>
-                        <span class="count bg-primary">4</span>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="message">
-                        <p class="red">You have 4 Mails</p>
-                        <a class="dropdown-item media" href="#">
-                            <span class="photo media-left"><img alt="avatar" src="{% static 'images/avatar/1.jpg' %}"></span>
-                            <div class="message media-body">
-                                <span class="name float-left">Jonathan Smith</span>
-                                <span class="time float-right">Just now</span>
-                                <p>Hello, this is an example msg</p>
-                            </div>
-                        </a>
-                        <a class="dropdown-item media" href="#">
-                            <span class="photo media-left"><img alt="avatar" src="{% static 'images/avatar/2.jpg' %}"></span>
-                            <div class="message media-body">
-                                <span class="name float-left">Jack Sanders</span>
-                                <span class="time float-right">5 minutes ago</span>
-                                <p>Lorem ipsum dolor sit amet, consectetur</p>
-                            </div>
-                        </a>
-                        <a class="dropdown-item media" href="#">
-                            <span class="photo media-left"><img alt="avatar" src="{% static 'images/avatar/3.jpg' %}"></span>
-                            <div class="message media-body">
-                                <span class="name float-left">Cheryl Wheeler</span>
-                                <span class="time float-right">10 minutes ago</span>
-                                <p>Hello, this is an example msg</p>
-                            </div>
-                        </a>
-                        <a class="dropdown-item media" href="#">
-                            <span class="photo media-left"><img alt="avatar" src="{% static 'images/avatar/4.jpg' %}"></span>
-                            <div class="message media-body">
-                                <span class="name float-left">Rachel Santos</span>
-                                <span class="time float-right">15 minutes ago</span>
-                                <p>Lorem ipsum dolor sit amet, consectetur</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="user-area dropdown float-right">
-                <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="user-avatar rounded-circle" src="{% static 'images/admin.png' %}" alt="User Avatar">
-                </a>
-
-                <div class="user-menu dropdown-menu">
-                    <a class="nav-link" href="#"><i class="fa fa- user"></i>My Profile</a>
-
-                    <a class="nav-link" href="#"><i class="fa fa- user"></i>Notifications <span class="count">13</span></a>
-
-                    <a class="nav-link" href="#"><i class="fa fa -cog"></i>Settings</a>
-
-                    <a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-power -off"></i>Logout</a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</header>
+</div>
