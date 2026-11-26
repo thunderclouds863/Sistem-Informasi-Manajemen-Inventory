@@ -14,12 +14,14 @@
         </button>
     </div>
 
+    {% if request.user.is_admin or request.user.is_staff or request.user.is_superuser %}
     <div class="sidebar-cta-wrap">
         <a href="{% url 'create-order' %}" class="sidebar-cta">
             <i data-lucide="plus"></i>
             <span>New Order</span>
         </a>
     </div>
+    {% endif %}
 
     <nav class="sidebar-nav">
         <div class="nav-section">
@@ -38,13 +40,13 @@
             <div class="nav-section-label">Operations</div>
             <ul class="nav-list">
                 <li>
-                    <a href="{% url 'order-list' %}" class="nav-item-link {% if url_name == 'order-list' or url_name == 'create-order' %}is-active{% endif %}">
+                    <a href="{% url 'order-list' %}" class="nav-item-link {% if url_name == 'order-list' or url_name == 'create-order' or url_name == 'edit-order' %}is-active{% endif %}">
                         <i data-lucide="clipboard-list"></i>
                         <span>Orders</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'delivery-list' %}" class="nav-item-link {% if url_name == 'delivery-list' or url_name == 'create-delivery' %}is-active{% endif %}">
+                    <a href="{% url 'delivery-list' %}" class="nav-item-link {% if url_name == 'delivery-list' or url_name == 'create-delivery' or url_name == 'edit-delivery' %}is-active{% endif %}">
                         <i data-lucide="truck"></i>
                         <span>Deliveries</span>
                     </a>
@@ -56,19 +58,19 @@
             <div class="nav-section-label">Catalog &amp; Storage</div>
             <ul class="nav-list">
                 <li>
-                    <a href="{% url 'product-list' %}" class="nav-item-link {% if url_name == 'product-list' or url_name == 'create-product' %}is-active{% endif %}">
+                    <a href="{% url 'product-list' %}" class="nav-item-link {% if url_name == 'product-list' or url_name == 'create-product' or url_name == 'edit-product' %}is-active{% endif %}">
                         <i data-lucide="package"></i>
                         <span>Products</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'drop-list' %}" class="nav-item-link {% if url_name == 'drop-list' or url_name == 'create-drop' %}is-active{% endif %}">
+                    <a href="{% url 'drop-list' %}" class="nav-item-link {% if url_name == 'drop-list' or url_name == 'create-drop' or url_name == 'edit-drop' %}is-active{% endif %}">
                         <i data-lucide="warehouse"></i>
                         <span>Warehouse Drops</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'season-list' %}" class="nav-item-link {% if url_name == 'season-list' or url_name == 'create-season' %}is-active{% endif %}">
+                    <a href="{% url 'season-list' %}" class="nav-item-link {% if url_name == 'season-list' or url_name == 'create-season' or url_name == 'edit-season' %}is-active{% endif %}">
                         <i data-lucide="calendar-range"></i>
                         <span>Seasons</span>
                     </a>
@@ -80,13 +82,13 @@
             <div class="nav-section-label">Partners</div>
             <ul class="nav-list">
                 <li>
-                    <a href="{% url 'supplier-list' %}" class="nav-item-link {% if url_name == 'supplier-list' or url_name == 'create-supplier' %}is-active{% endif %}">
+                    <a href="{% url 'supplier-list' %}" class="nav-item-link {% if url_name == 'supplier-list' or url_name == 'create-supplier' or url_name == 'edit-supplier' %}is-active{% endif %}">
                         <i data-lucide="factory"></i>
                         <span>Suppliers</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'buyer-list' %}" class="nav-item-link {% if url_name == 'buyer-list' or url_name == 'create-buyer' %}is-active{% endif %}">
+                    <a href="{% url 'buyer-list' %}" class="nav-item-link {% if url_name == 'buyer-list' or url_name == 'create-buyer' or url_name == 'edit-buyer' %}is-active{% endif %}">
                         <i data-lucide="store"></i>
                         <span>Buyers</span>
                     </a>
@@ -96,15 +98,15 @@
     </nav>
 
     <div class="sidebar-footer">
-        <div class="sidebar-user">
+        <a href="{% url 'profile' %}" class="sidebar-user" title="Account &amp; Password Settings">
             <span class="user-initials">{{ request.user.username|default:"TR"|slice:":2" }}</span>
             <div class="sidebar-user-meta">
                 <span class="sidebar-user-name">{{ request.user.username|default:"Guest" }}</span>
                 <span class="sidebar-user-role">
-                    {% if request.user.is_admin or request.user.is_superuser %}Administrator{% elif request.user.is_supplier %}Supplier{% elif request.user.is_buyer %}Buyer{% else %}Operator{% endif %}
+                    {% if request.user.is_admin or request.user.is_superuser or request.user.is_staff %}Administrator{% elif request.user.is_supplier %}Supplier{% elif request.user.is_buyer %}Buyer{% else %}Operator{% endif %}
                 </span>
             </div>
-        </div>
+        </a>
         <a href="{% url 'logout' %}" class="sidebar-logout-btn" title="Sign out" aria-label="Sign out">
             <i data-lucide="log-out"></i>
         </a>

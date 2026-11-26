@@ -18,12 +18,14 @@
         </h1>
         <p class="page-subtitle">Storage zones and staging warehouses for raw, semi-finished, and finished goods.</p>
     </div>
+    {% if is_admin_user %}
     <div class="page-actions">
         <a href="{% url 'create-drop' %}" class="btn-tarindo btn-brass">
             <i data-lucide="plus"></i>
             <span>Add Drop</span>
         </a>
     </div>
+    {% endif %}
 </div>
 
 <section class="surface-card" data-filter-table>
@@ -42,6 +44,7 @@
                     <th class="cell-serial">#</th>
                     <th>Warehouse / Drop Location</th>
                     <th>Created</th>
+                    {% if is_admin_user %}<th>Actions</th>{% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +58,21 @@
                         </div>
                     </td>
                     <td class="cell-muted mono">{{ item.created_date|date:"Y-m-d" }}</td>
+                    {% if is_admin_user %}
+                    <td>
+                        <div class="row-actions">
+                            <a href="{% url 'edit-drop' item.pk %}" class="row-action-btn" title="Edit {{ item.name }}" aria-label="Edit {{ item.name }}">
+                                <i data-lucide="pencil"></i>
+                            </a>
+                            <form method="post" action="{% url 'delete-drop' item.pk %}" data-confirm-delete="Delete warehouse drop '{{ item.name }}'?">
+                                {% csrf_token %}
+                                <button type="submit" class="row-action-btn row-action-btn--danger" title="Delete {{ item.name }}" aria-label="Delete {{ item.name }}">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -69,10 +87,12 @@
         </svg>
         <h3>No warehouse drops defined</h3>
         <p>Add storage locations such as raw materials or finished goods warehouses.</p>
+        {% if is_admin_user %}
         <a href="{% url 'create-drop' %}" class="btn-tarindo btn-brass btn-sm">
             <i data-lucide="plus"></i>
             <span>Add Drop</span>
         </a>
+        {% endif %}
     </div>
     {% endif %}
 </section>

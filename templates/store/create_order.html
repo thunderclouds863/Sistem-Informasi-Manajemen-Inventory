@@ -1,21 +1,21 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Create Order{% endblock title %}
+{% block title %}{% if is_edit %}Edit Order{% else %}Create Order{% endif %}{% endblock title %}
 
 {% block breadcrumbs %}
 <a href="{% url 'dashboard' %}">Dashboard</a>
 <span class="crumb-sep">/</span>
 <a href="{% url 'order-list' %}">Orders</a>
 <span class="crumb-sep">/</span>
-<span class="crumb-current">Create</span>
+<span class="crumb-current">{% if is_edit %}Edit{% else %}Create{% endif %}</span>
 {% endblock breadcrumbs %}
 
 {% block content %}
 <div class="page-header-bar">
     <div class="page-header-copy">
         <div class="page-eyebrow">Operations</div>
-        <h1 class="page-title">Create Order</h1>
-        <p class="page-subtitle">Record a new production or purchasing order and assign its warehouse drop.</p>
+        <h1 class="page-title">{% if is_edit %}Edit Order {{ instance.design }}{% else %}Create Order{% endif %}</h1>
+        <p class="page-subtitle">{% if is_edit %}Update order specifications, warehouse routing, or fulfillment status.{% else %}Record a new production or purchasing order and assign its warehouse drop.{% endif %}</p>
     </div>
     <div class="page-actions">
         <a href="{% url 'order-list' %}" class="btn-tarindo btn-secondary">
@@ -89,11 +89,19 @@
                     </div>
                 </div>
 
+                {% if is_edit and form.status %}
+                <div class="form-field">
+                    <label for="status" class="form-label">Order Status</label>
+                    {{ form.status }}
+                    {% if form.status.errors %}<span class="field-error">{{ form.status.errors.0 }}</span>{% endif %}
+                </div>
+                {% endif %}
+
                 <div class="form-actions">
                     <a href="{% url 'order-list' %}" class="btn-tarindo btn-secondary">Cancel</a>
                     <button type="submit" class="btn-tarindo btn-brass">
                         <i data-lucide="check"></i>
-                        <span>Create Order</span>
+                        <span>{% if is_edit %}Save Changes{% else %}Create Order{% endif %}</span>
                     </button>
                 </div>
             </form>

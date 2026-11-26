@@ -18,12 +18,14 @@
         </h1>
         <p class="page-subtitle">Track supplier production orders, design specifications, and warehouse routing.</p>
     </div>
+    {% if is_admin_user %}
     <div class="page-actions">
         <a href="{% url 'create-order' %}" class="btn-tarindo btn-brass">
             <i data-lucide="plus"></i>
             <span>Create Order</span>
         </a>
     </div>
+    {% endif %}
 </div>
 
 <section class="surface-card" data-filter-table>
@@ -57,6 +59,7 @@
                     <th>Drop</th>
                     <th>Date</th>
                     <th>Status</th>
+                    {% if is_admin_user %}<th>Actions</th>{% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -77,11 +80,37 @@
                     <td class="cell-muted">{{ item.drop|default:"—" }}</td>
                     <td class="cell-muted mono">{{ item.created_date|date:"Y-m-d" }}</td>
                     <td>
+                        {% if is_admin_user %}
+                        <form method="post" action="{% url 'update-order-status' item.pk %}" class="inline-status-form">
+                            {% csrf_token %}
+                            <select name="status" class="status-select status-select--{{ item.status }}" aria-label="Update status for order {{ item.design }}" onchange="this.form.submit()">
+                                {% for val, label in status_choices %}
+                                <option value="{{ val }}" {% if item.status == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        {% else %}
                         <span class="status-badge status-badge--{{ item.status }}">
                             <span class="status-dot"></span>
                             {{ item.get_status_display }}
                         </span>
+                        {% endif %}
                     </td>
+                    {% if is_admin_user %}
+                    <td>
+                        <div class="row-actions">
+                            <a href="{% url 'edit-order' item.pk %}" class="row-action-btn" title="Edit order {{ item.design }}" aria-label="Edit order {{ item.design }}">
+                                <i data-lucide="pencil"></i>
+                            </a>
+                            <form method="post" action="{% url 'delete-order' item.pk %}" data-confirm-delete="Delete order {{ item.design }} ({{ item.product }})? Any linked delivery records will also be removed.">
+                                {% csrf_token %}
+                                <button type="submit" class="row-action-btn row-action-btn--danger" title="Delete order {{ item.design }}" aria-label="Delete order {{ item.design }}">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -96,10 +125,12 @@
         </svg>
         <h3>No orders yet</h3>
         <p>Start by creating an order linking a supplier, product, buyer, and warehouse drop.</p>
+        {% if is_admin_user %}
         <a href="{% url 'create-order' %}" class="btn-tarindo btn-brass btn-sm">
             <i data-lucide="plus"></i>
             <span>Create Order</span>
         </a>
+        {% endif %}
     </div>
     {% endif %}
 </section>
