@@ -3,9 +3,11 @@ from django.contrib import admin
 from .models import User
 
 
-@admin.action(description='Approve selected pending accounts')
 def approve_selected_users(modeladmin, request, queryset):
     queryset.update(is_active=True)
+
+
+approve_selected_users.short_description = 'Approve selected pending accounts'
 
 
 class UserAdmin(admin.ModelAdmin):
