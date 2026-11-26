@@ -1,0 +1,105 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Account &amp; Password{% endblock title %}
+
+{% block breadcrumbs %}
+<a href="{% url 'dashboard' %}">Dashboard</a>
+<span class="crumb-sep">/</span>
+<span class="crumb-current">Account &amp; Password</span>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<div class="page-header-bar">
+    <div class="page-header-copy">
+        <div class="page-eyebrow">Account Security</div>
+        <h1 class="page-title">Account &amp; Password</h1>
+        <p class="page-subtitle">Review your PT TARINDO workspace role and update your password.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'dashboard' %}" class="btn-tarindo btn-secondary">
+            <i data-lucide="arrow-left"></i>
+            <span>Back to Dashboard</span>
+        </a>
+    </div>
+</div>
+
+<div class="form-workspace">
+    <section class="surface-card">
+        <div class="surface-header">
+            <div>
+                <h2 class="surface-title">Change Password</h2>
+                <p class="surface-subtitle">Keep your account protected with a strong password</p>
+            </div>
+        </div>
+        <div class="surface-body">
+            {% if password_form.non_field_errors %}
+            <div class="form-error-banner" role="alert">
+                <i data-lucide="alert-circle"></i>
+                <div>{% for e in password_form.non_field_errors %}<div>{{ e }}</div>{% endfor %}</div>
+            </div>
+            {% endif %}
+
+            <form method="post" data-loading-form>
+                {% csrf_token %}
+
+                <div class="form-field">
+                    <label for="old_password" class="form-label">Current Password</label>
+                    <div class="input-password-wrap">
+                        {{ password_form.old_password }}
+                        <button type="button" class="password-toggle-btn" data-toggle-password="old_password" aria-label="Show password">
+                            <i data-lucide="eye" class="icon-eye"></i>
+                            <i data-lucide="eye-off" class="icon-eye-off" style="display:none"></i>
+                        </button>
+                    </div>
+                    {% if password_form.old_password.errors %}<span class="field-error">{{ password_form.old_password.errors.0 }}</span>{% endif %}
+                </div>
+
+                <div class="form-grid-2 form-section-gap">
+                    <div class="form-field">
+                        <label for="new_password1" class="form-label">New Password</label>
+                        <div class="input-password-wrap">
+                            {{ password_form.new_password1 }}
+                            <button type="button" class="password-toggle-btn" data-toggle-password="new_password1" aria-label="Show password">
+                                <i data-lucide="eye" class="icon-eye"></i>
+                                <i data-lucide="eye-off" class="icon-eye-off" style="display:none"></i>
+                            </button>
+                        </div>
+                        {% if password_form.new_password1.errors %}<span class="field-error">{{ password_form.new_password1.errors.0 }}</span>{% endif %}
+                    </div>
+                    <div class="form-field">
+                        <label for="new_password2" class="form-label">Confirm New Password</label>
+                        <div class="input-password-wrap">
+                            {{ password_form.new_password2 }}
+                            <button type="button" class="password-toggle-btn" data-toggle-password="new_password2" aria-label="Show password">
+                                <i data-lucide="eye" class="icon-eye"></i>
+                                <i data-lucide="eye-off" class="icon-eye-off" style="display:none"></i>
+                            </button>
+                        </div>
+                        {% if password_form.new_password2.errors %}<span class="field-error">{{ password_form.new_password2.errors.0 }}</span>{% endif %}
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-tarindo btn-brass">
+                        <i data-lucide="shield-check"></i>
+                        <span>Update Password</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <aside class="guide-card">
+        <h3 class="guide-card-title">
+            <i data-lucide="badge-check"></i>
+            <span>Account Summary</span>
+        </h3>
+        <p>Signed in as <strong>{{ request.user.username }}</strong>.</p>
+        <ul class="guide-list">
+            <li><i data-lucide="shield"></i><span>Role: <strong>{% if request.user.is_admin or request.user.is_superuser or request.user.is_staff %}Administrator (Full Access){% elif request.user.is_supplier %}Supplier (Scoped Read Access){% elif request.user.is_buyer %}Buyer (Scoped Read Access){% else %}Standard User{% endif %}</strong></span></li>
+            <li><i data-lucide="mail"></i><span>Email: <strong>{{ request.user.email|default:"Not set" }}</strong></span></li>
+            <li><i data-lucide="lock"></i><span>Passwords must be at least 8 characters and not purely numeric.</span></li>
+        </ul>
+    </aside>
+</div>
+{% endblock content %}
