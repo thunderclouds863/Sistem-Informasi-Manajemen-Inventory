@@ -95,6 +95,31 @@
                 </li>
             </ul>
         </div>
+
+        {% if request.user.is_admin or request.user.is_staff or request.user.is_superuser %}
+        <div class="nav-section">
+            <div class="nav-section-label">Administration</div>
+            <ul class="nav-list">
+                <li>
+                    <a href="{% url 'pending-approvals' %}" class="nav-item-link {% if url_name == 'pending-approvals' %}is-active{% endif %}">
+                        <i data-lucide="user-check"></i>
+                        <span>Approvals</span>
+                        {% if pending_approvals_count > 0 %}
+                        <span class="nav-badge">{{ pending_approvals_count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                {% if request.user.is_staff or request.user.is_superuser %}
+                <li>
+                    <a href="/admin/" class="nav-item-link" target="_blank" rel="noopener noreferrer">
+                        <i data-lucide="sliders-horizontal"></i>
+                        <span>Django Admin CMS</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
     </nav>
 
     <div class="sidebar-footer">
