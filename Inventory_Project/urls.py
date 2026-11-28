@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from .views import dashboard
+from .views import dashboard, demo_reset
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path ('', dashboard, name='dashboard'),
+    path('_demo/reset/', demo_reset, name='demo_reset'),
     path('users/', include('users.urls')),
     path('SI/', include('SI.urls')),
 ]

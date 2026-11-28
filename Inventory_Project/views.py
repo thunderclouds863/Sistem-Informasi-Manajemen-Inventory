@@ -1,6 +1,15 @@
+import hmac
+import os
+import subprocess
+import sys
+from datetime import datetime, timezone
+
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Sum
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from SI.models import Product, Supplier, Buyer, Order, Delivery, Drop, Season
 from SI.permissions import is_admin_user
@@ -84,3 +93,20 @@ def dashboard(request):
         'recent_deliveries': deliveries_qs[:4],
     }
     return render(request, 'dashboard.html', context)
+
+
+@csrf_exempt
+@require_POST
+def demo_reset(request):
+    expected = os.environ.get('DEMO_RESET_SECRET', '')
+    if not expected:
+        return JsonResponse({'ok': False, 'error': 'DEMO_RESET_SECRET not configured'}, status=503)
+    auth = request.META.get('HTTP_AUTHORIZATION', '')
+    provided = auth[7:].strip() if auth.startswith('Bearer ') else request.META.get('HTTP_X_DEMO_RESET_SECRET', '')
+    if not provided or not hmac.compare_digest(expected, provided):
+        return JsonResponse({'ok': False, 'error': 'Unauthorized'}, status=401)
+    script = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'deploy', 'migrate_locked.py')
+    proc = subprocess.run([sys.executable, script, '--force'], capture_output=True, text=True, timeout=120)
+    if proc.returncode != 0:
+        return JsonResponse({'ok': False, 'error': (proc.stderr or proc.stdout)[-800:]}, status=500)
+    return JsonResponse({'ok': True, 'app': 'inventory-demo', 'reset_at': datetime.now(timezone.utc).isoformat()})
