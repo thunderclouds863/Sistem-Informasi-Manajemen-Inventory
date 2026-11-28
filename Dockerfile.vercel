@@ -1,0 +1,10 @@
+# Vercel container: Django + gunicorn. Database = Postgres eksternal (DATABASE_URL).
+FROM python:3.9-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 DEBUG=False PORT=80
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+RUN cp deploy/demo-banner.js static/demo-banner.js \
+ && SECRET_KEY=build python manage.py collectstatic --no-input
+CMD ["bash", "deploy/start-vercel.sh"]

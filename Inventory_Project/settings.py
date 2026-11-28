@@ -86,6 +86,21 @@ DATABASES = {
     }
 }
 
+# DATABASE_URL (Postgres, mis. Neon) dipakai kalau di-set — wajib di Vercel karena filesystem container ephemeral
+if os.environ.get('DATABASE_URL'):
+    from urllib.parse import urlparse, parse_qs
+    _db = urlparse(os.environ['DATABASE_URL'])
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': _db.path.lstrip('/'),
+        'USER': _db.username,
+        'PASSWORD': _db.password,
+        'HOST': _db.hostname,
+        'PORT': _db.port or 5432,
+        'OPTIONS': {'sslmode': parse_qs(_db.query).get('sslmode', ['require'])[0]},
+        'CONN_MAX_AGE': 60,
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
